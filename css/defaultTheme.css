@@ -83,7 +83,15 @@
 	    left: 0;
 	    position: absolute;
 	    }
-	    
+	
+	.fht-table-wrapper .fht-fixed-column[data-rtl],
+	.fht-table-wrapper .fht-fixed-body[data-rtl] {
+		/* position */
+		top: 0;
+		right: 0;
+		position: absolute;
+	}
+	
 	.fht-table-wrapper .fht-fixed-column {
 	    /* position */
 	    z-index: 1;

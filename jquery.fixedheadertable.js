@@ -77,6 +77,7 @@
         settings.includePadding = helpers._isPaddingIncludedWithWidth();
         settings.scrollbarOffset = helpers._getScrollbarWidth();
         settings.themeClassName = settings.themeClass;
+        settings.directionRtl = $("body").css("direction") === "rtl";
 
         if (settings.width.search && settings.width.search('%') > -1) {
             widthMinusScrollbar = $self.parent().width() - settings.scrollbarOffset;
@@ -102,8 +103,13 @@
 
         if (settings.fixedColumns > 0 && $wrapper.find('.fht-fixed-column').length == 0) {
           $self.wrap('<div class="fht-fixed-body"></div>');
+            
+          var rtl = "";
+          if (settings.directionRtl) {
+              rtl = "data-rtl";
+          }
 
-          $('<div class="fht-fixed-column"></div>').prependTo($wrapper);
+          $('<div class="fht-fixed-column"' + rtl + '></div>').prependTo($wrapper);
 
           $fixedBody    = $wrapper.find('.fht-fixed-body');
         }
@@ -337,18 +343,32 @@
               .css({
                   'margin-top': -$self.scrollTop()
               });
-          }
+            }
 
-          $thead.find('table')
-            .css({
-              'margin-left': -this.scrollLeft
-            });
+          if (settings.directionRtl) {
+              $thead.find('table')
+                  .css({
+                      'margin-right': -(this.scrollWidth - this.clientWidth - this.scrollLeft)
+                  });
 
-          if (settings.footer || settings.cloneHeadToFoot) {
-            $tfoot.find('table')
-              .css({
-                'margin-left': -this.scrollLeft
-              });
+              if (settings.footer || settings.cloneHeadToFoot) {
+                  $tfoot.find('table')
+                      .css({
+                          'margin-right': -(this.scrollWidth - this.clientWidth - this.scrollLeft)
+                      });
+              }
+          } else {
+              $thead.find('table')
+                  .css({
+                      'margin-left': -this.scrollLeft
+                  });
+
+              if (settings.footer || settings.cloneHeadToFoot) {
+                  $tfoot.find('table')
+                      .css({
+                          'margin-left': -this.scrollLeft
+                      });
+              }
           }
         });
       },
